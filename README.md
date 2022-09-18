@@ -1,2 +1,19 @@
 # vue3firstlesson
-Репозиторий для изучения Vue3. Здесь будут работа, проделанная в результате изучения урока https://www.youtube.com/watch?v=XzLuMtDelGk
+
+## Project setup
+```
+npm install
+```
+
+### Compiles and hot-reloads for development
+```
+npm run serve
+```
+
+### Compiles and minifies for production
+```
+npm run build
+```
+
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).
