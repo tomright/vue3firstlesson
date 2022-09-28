@@ -3,7 +3,6 @@
     <h1>Страница с постами</h1>
     <div class="app__btns">
       <my-button @click="showDialog">Создать пост!</my-button>
-      <!-- ТУТ БАГ или ошибка при добавлении v-model='selectedSort' -->
       <my-select v-model="selectedSort" :options="sortOptions"></my-select>
     </div>
     <my-dialog v-model:show="dialogVisible">
