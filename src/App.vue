@@ -1,17 +1,22 @@
 <template>
   <div class="app">
     <h1>Страница с постами</h1>
-    <my-button @click="showDialog">Создать пост!</my-button>
+    <div class="app__btns">
+      <my-button @click="showDialog">Создать пост!</my-button>
+      <!-- ТУТ БАГ или ошибка при добавлении v-model='selectedSort' -->
+      <my-select v-model="selectedSort" :options="sortOptions"></my-select>
+    </div>
     <my-dialog v-model:show="dialogVisible">
       <post-form @create="createPost" />
     </my-dialog>
-    <post-list @remove="removePost" :posts="posts" />
+    <post-list @remove="removePost" :posts="posts" v-if="!isPostLoading" />
+    <div v-else>Идет загрузка постов</div>
   </div>
 </template>
 <script>
 import PostForm from "@/components/PostForm.vue";
 import PostList from "@/components/PostList.vue";
-import axios from 'axios';
+import axios from "axios";
 export default {
   components: {
     PostForm,
@@ -19,13 +24,20 @@ export default {
   },
   data() {
     return {
-      posts: [
-        { id: 1, title: "JavaScript", body: "Описание поста" },
-        { id: 2, title: "JavaScript 2", body: "Описание поста 2" },
-        { id: 3, title: "JavaScript 3", body: "Описание поста 3" },
-        { id: 4, title: "JavaScript 4", body: "Описание поста 4" },
-      ],
+      posts: [],
       dialogVisible: false,
+      isPostLoading: false,
+      selectedSort: "",
+      sortOptions: [
+        {
+          value: "title",
+          name: "По названию",
+        },
+        {
+          value: "body",
+          name: "По описанию",
+        },
+      ],
     };
   },
   methods: {
@@ -41,17 +53,21 @@ export default {
     },
     async fetchPosts() {
       try {
-        const response = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10');
+        this.isPostLoading = true;
+        const response = await axios.get(
+          "https://jsonplaceholder.typicode.com/posts?_limit=10"
+        );
         this.posts = response.data;
       } catch (e) {
-      alert(`Произошла ошибка ${e}`)
-    }
-  }
+        alert(`Произошла ошибка ${e}`);
+      } finally {
+        this.isPostLoading = false;
+      }
+    },
   },
   mounted() {
     this.fetchPosts();
-  }
-
+  },
 };
 </script>
 <style>
@@ -62,5 +78,9 @@ export default {
 }
 .app {
   padding: 20px;
+}
+.app__btns {
+  display: flex;
+  justify-content: space-between;
 }
 </style>
